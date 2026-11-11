@@ -105,7 +105,7 @@ static void on_about(GSimpleAction *a, GVariant *p, gpointer ud)
     AdwDialog *about = adw_about_dialog_new();
     adw_about_dialog_set_application_name(ADW_ABOUT_DIALOG(about), "ExtApp");
     adw_about_dialog_set_application_icon(ADW_ABOUT_DIALOG(about),
-                                          "application-x-executable");
+                                          "org.codeberg.giocal88.ExtApp");
     adw_about_dialog_set_version(ADW_ABOUT_DIALOG(about), EXTAPP_VERSION_STRING);
     adw_about_dialog_set_developer_name(ADW_ABOUT_DIALOG(about), "Giorgio Caldini");
     adw_about_dialog_set_comments(ADW_ABOUT_DIALOG(about),

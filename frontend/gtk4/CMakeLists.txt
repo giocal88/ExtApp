@@ -18,8 +18,12 @@ set_target_properties(extapp-gtk PROPERTIES OUTPUT_NAME extapp)
 target_link_libraries(extapp-gtk PRIVATE ExtApp::backend PkgConfig::GTK4 PkgConfig::ADW)
 target_compile_definitions(extapp-gtk PRIVATE
   GLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_76
-  GDK_VERSION_MIN_REQUIRED=GDK_VERSION_4_12)
+  GDK_VERSION_MIN_REQUIRED=GDK_VERSION_4_12
+  # Lets an uninstalled build find its own app icon.
+  EXTAPP_SOURCE_ICONS_DIR="${CMAKE_CURRENT_SOURCE_DIR}/data/icons")
 
 install(TARGETS extapp-gtk RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(FILES data/org.codeberg.giocal88.ExtApp.desktop
         DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+install(FILES data/icons/hicolor/scalable/apps/org.codeberg.giocal88.ExtApp.svg
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)

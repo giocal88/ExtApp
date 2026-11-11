@@ -27,6 +27,16 @@ static void on_startup(GApplication *app, gpointer ud)
         GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     g_object_unref(css);
 
+    /* Installed builds get the icon from the hicolor theme; an uninstalled
+     * build (run from the build tree) falls back to the source tree. */
+#ifdef EXTAPP_SOURCE_ICONS_DIR
+    GtkIconTheme *theme = gtk_icon_theme_get_for_display(gdk_display_get_default());
+    if (!gtk_icon_theme_has_icon(theme, APP_ID) &&
+        g_file_test(EXTAPP_SOURCE_ICONS_DIR, G_FILE_TEST_IS_DIR))
+        gtk_icon_theme_add_search_path(theme, EXTAPP_SOURCE_ICONS_DIR);
+#endif
+    gtk_window_set_default_icon_name(APP_ID);
+
     static const char *quit_accels[] = {"<Control>q", NULL};
     static const char *refresh_accels[] = {"F5", "<Control>r", NULL};
     gtk_application_set_accels_for_action(GTK_APPLICATION(app), "app.quit", quit_accels);

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <title>ExtApp</title>
+  <!-- Box -->
+  <polygon points="64,16 110,39 64,62 18,39" fill="#ffa348"/>
+  <polygon points="18,39 64,62 64,114 18,91" fill="#e66100"/>
+  <polygon points="64,62 110,39 110,91 64,114" fill="#c64600"/>
+  <!-- Tape -->
+  <polygon points="35,31 47,25 93,48 81,54" fill="#ffffff" fill-opacity="0.45"/>
+  <polygon points="81,54 93,48 93,62 81,68" fill="#ffffff" fill-opacity="0.25"/>
+  <!-- Shortcut badge -->
+  <circle cx="38" cy="96" r="23" fill="#c0bfbc"/>
+  <circle cx="38" cy="93" r="23" fill="#ffffff"/>
+  <path d="M28 104 Q28 85 46 85" fill="none" stroke="#3584e4" stroke-width="7" stroke-linecap="round"/>
+  <polygon points="43,76 54,85 43,94" fill="#3584e4" stroke="#3584e4" stroke-width="3" stroke-linejoin="round"/>
+</svg>

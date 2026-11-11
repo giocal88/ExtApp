@@ -19,7 +19,10 @@ add_library(extapp ${_extapp_lib_type}
   src/desktop_entry.c
   src/entries.c
   src/http.c
-  src/icon_search_ddg.c
+  src/icon_provider_appimagehub.c
+  src/icon_provider_commons.c
+  src/icon_provider_flathub.c
+  src/icon_search.c
   src/icons.c
   src/scanner.c
   src/util.c

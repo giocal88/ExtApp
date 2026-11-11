@@ -8,8 +8,8 @@ applications folder (`~/.local/share/applications`).
   executables and, optionally, scripts. Each one shows whether it already has
   a shortcut, and whether it still needs to be made executable.
 - **Create shortcuts**: name, description, category, extra arguments,
-  "run in terminal", and an icon — from a file, or searched online
-  (DuckDuckGo Images) on request.
+  "run in terminal", and an icon — from a file, or searched online on
+  request (AppImageHub, Flathub and Wikimedia Commons).
 - **Manage shortcuts**: list every application shortcut in your personal
   applications folder, edit the ones ExtApp created, and remove shortcuts
   (with a stronger warning for ones ExtApp did not create).
@@ -23,6 +23,7 @@ any other) frontend without touching the core logic.
 backend/                 libextapp — C11 + POSIX + libcurl, no GLib/Qt
   include/extapp/extapp.h  the only public header (C ABI, C++-safe)
   src/                     scanner, .desktop parser/writer, HTTP, icon search
+                           (one icon_provider_*.c file per source)
   third_party/cjson/       vendored cJSON 1.7.18 (MIT)
   tests/                   unit tests (no network needed)
 frontend/
@@ -33,8 +34,9 @@ frontend/
 Shortcuts created by ExtApp are named `extapp-<name>.desktop` and carry
 `X-ExtApp-Managed=true` and `X-ExtApp-Target=<program>`. That is how ExtApp
 recognises its own files and links programs to their shortcuts. Downloaded
-icons are stored in `~/.local/share/extapp/icons/`. All paths follow
-`$XDG_DATA_HOME`.
+icons are stored in `~/.local/share/extapp/icons/`, and the AppImageHub
+catalogue is cached in `~/.cache/extapp/`. All paths follow `$XDG_DATA_HOME`
+and `$XDG_CACHE_HOME`.
 
 ## Building
 
@@ -62,7 +64,7 @@ CMake options: `EXTAPP_BUILD_GTK`, `EXTAPP_BUILD_CLI`, `EXTAPP_BUILD_TESTS`
 extapp-cli scan ~/Applications
 extapp-cli create ~/Applications/Foo-1.2-x86_64.AppImage --categories Utility --chmod
 extapp-cli list
-extapp-cli icons "foo icon"
+extapp-cli icons "foo"
 extapp-cli remove ~/.local/share/applications/extapp-foo.desktop
 ```
 
@@ -84,14 +86,26 @@ Link against `ExtApp::backend` and include `<extapp/extapp.h>`. The contract:
 - **Images.** The backend never decodes images. Convert icons to PNG
   (e.g. `QImage::save`) before `extapp_icon_save()`; SVG can be passed as-is.
 
-## Notes on the online icon search
+## Online icon search
 
-DuckDuckGo has no official image API; ExtApp uses the same requests its web
-page makes. DuckDuckGo may rate-limit or show a bot check to repeated
-automated searches. When that happens ExtApp reports it instead of working
-around it — wait a while, or choose an icon from a file. The provider sits
-behind a small table in `backend/src/icon_search_ddg.c`, so another source can
-be added. Check an image's license before redistributing it.
+When asked, ExtApp searches three free sources in parallel. None of them needs
+an API key:
+
+| Source | What it returns |
+|---|---|
+| [AppImageHub](https://appimage.github.io) | The official icon of ~3700 AppImages. The catalogue (~2.5 MB) is cached and refreshed weekly; a stale copy is used offline. |
+| [Flathub](https://flathub.org) | The official 128×128 icon of matching Flatpak apps (found by name, app id or keyword, e.g. "vscode"). |
+| [Wikimedia Commons](https://commons.wikimedia.org) | Logo files whose name mentions the app. Big rasters are replaced by a 256 px rendering. |
+
+Results are merged with application catalogues first. Words such as "icon"
+or "logo" in the query are ignored. Each word of the query must start a word
+of the name, so "lm studio" matches "LM Studio" but not "Elmer Studio".
+ExtApp sends an honest `User-Agent` (`ExtApp/<version> (+project URL)`), as
+Wikimedia requires.
+
+Adding a source means writing one `EaIconProvider` (see
+`backend/src/icon_provider_*.c`) and listing it in `backend/src/icon_search.c`.
+Logos may be trademarks: check an image's license before redistributing it.
 
 ## License
 

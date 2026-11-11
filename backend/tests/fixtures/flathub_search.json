@@ -1,0 +1,60 @@
+{
+ "hits": [
+  {
+   "app_id": "md.obsidian.Obsidian",
+   "name": "Obsidian",
+   "summary": "Markdown-based knowledge base",
+   "icon": "https://dl.flathub.org/media/md/obsidian/Obsidian/c97fbe7fe83bc7e70ac76009b6b56055/icons/128x128/md.obsidian.Obsidian.png",
+   "keywords": null
+  },
+  {
+   "app_id": "org.b3log.siyuan",
+   "name": "SiYuan",
+   "summary": "A privacy-first personal knowledge management system",
+   "icon": "https://dl.flathub.org/media/org/b3log/siyuan/9ae0e0b96a63ea9cca1d14cf79cb39d2/icons/128x128/org.b3log.siyuan.png",
+   "keywords": null
+  },
+  {
+   "app_id": "com.toolstack.Folio",
+   "name": "Folio",
+   "summary": "Beautiful markdown note-taking app",
+   "icon": "https://dl.flathub.org/media/com/toolstack/Folio/ded7a90c389b6f92f62850de9650b6a5/icons/128x128/com.toolstack.Folio.png",
+   "keywords": [
+    "Notebook",
+    "Note",
+    "Notes"
+   ]
+  },
+  {
+   "app_id": "org.example.NoIcon",
+   "name": "Obsidian No Icon",
+   "summary": "x",
+   "icon": null
+  },
+  {
+   "app_id": "org.example.ObsidianTools",
+   "name": "Obsidian Tools",
+   "summary": "x",
+   "icon": "https://dl.flathub.org/media/org/example/ObsidianTools/abc/icons/64x64/org.example.ObsidianTools.png"
+  },
+  {
+   "app_id": "org.example.Evil",
+   "name": "Obsidian Evil",
+   "icon": "http://insecure.example/icon.png"
+  },
+  {
+   "app_id": "com.visualstudio.code",
+   "name": "Visual Studio Code",
+   "keywords": [
+    "vscode",
+    "development"
+   ],
+   "icon": "https://dl.flathub.org/media/com/visualstudio/code/x/icons/128x128/com.visualstudio.code.png"
+  }
+ ],
+ "query": "obsidian",
+ "processingTimeMs": 1,
+ "limit": 20,
+ "offset": 0,
+ "estimatedTotalHits": 6
+}

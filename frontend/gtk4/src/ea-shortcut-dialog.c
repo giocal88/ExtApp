@@ -93,7 +93,8 @@ static void on_icon_chosen(EaIconSearchDialog *d, GBytes *bytes, gpointer ud)
 static void on_search_icon(EaShortcutDialog *self)
 {
     const char *name = gtk_editable_get_text(GTK_EDITABLE(self->name_row));
-    g_autofree char *q = g_strdup_printf("%s icon", *name ? name : "app");
+    /* empty name: open the dialog idle instead of searching for nothing */
+    g_autofree char *q = g_strstrip(g_strdup(name));
     EaIconSearchDialog *d = ea_icon_search_dialog_new(q);
     g_signal_connect_object(d, "icon-chosen", G_CALLBACK(on_icon_chosen), self, 0);
     adw_dialog_present(ADW_DIALOG(d), GTK_WIDGET(self));

@@ -23,7 +23,8 @@ static void usage(FILE *f)
         "  remove FILE.desktop [--force] [--delete-icon]\n"
         "                          remove a shortcut (--force: even if not\n"
         "                          created by ExtApp)\n"
-        "  icons QUERY [--max N]   search icons online (DuckDuckGo)\n"
+        "  icons NAME [--max N]    search icons online (AppImageHub, Flathub,\n"
+        "                          Wikimedia Commons)\n"
         "  fetch-icon URL NAME     download an image and store it as icon\n"
         "\n"
         "Applications folder: $XDG_DATA_HOME/applications "
@@ -202,9 +203,14 @@ static int cmd_icons(ExtAppContext *ctx, int argc, char **argv)
         return fail(st, err);
     for (size_t i = 0; i < l->count; i++) {
         const ExtAppIconResult *r = &l->items[i];
-        printf("%4dx%-4d %s\n          thumb: %s\n", r->width, r->height,
-               r->image_url ? r->image_url : "-",
-               r->thumbnail_url ? r->thumbnail_url : "-");
+        char size[32] = "?";
+        if (r->scalable)
+            snprintf(size, sizeof size, "SVG");
+        else if (r->width > 0 && r->height > 0)
+            snprintf(size, sizeof size, "%dx%d", r->width, r->height);
+        printf("%-18s %-9s %s\n    %s\n", r->provider ? r->provider : "-", size,
+               r->title ? r->title : "",
+               r->image_url ? r->image_url : "-");
     }
     printf("%zu result(s)\n", l->count);
     extapp_icon_result_list_free(l);

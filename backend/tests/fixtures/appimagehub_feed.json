@@ -1,0 +1,70 @@
+{
+ "version": "https://jsonfeed.org/version/1",
+ "title": "AppImageHub",
+ "items": [
+  {
+   "name": "Kdenlive",
+   "icons": [
+    "Kdenlive/icons/scalable/kdenlive.svg"
+   ],
+   "categories": [
+    "Qt"
+   ]
+  },
+  {
+   "name": "Obsidian",
+   "icons": [
+    "Obsidian/icons/128x128/obsidian.png"
+   ]
+  },
+  {
+   "name": "Obsidian Clipper Helper",
+   "icons": [
+    "Obsidian Clipper Helper/icons/32x32/helper.png",
+    "Obsidian Clipper Helper/icons/256x256/helper.png"
+   ]
+  },
+  {
+   "name": "Kdenlive Tools",
+   "icons": null
+  },
+  {
+   "name": "NotObsidianAtAll",
+   "icons": [
+    "Nope/icons/64x64/nope.png"
+   ]
+  },
+  {
+   "name": "Evil",
+   "icons": [
+    "../../etc/passwd",
+    "https://evil.example/x.png"
+   ]
+  },
+  {
+   "name": "Firefox Nightly",
+   "icons": [
+    "Firefox Nightly/icons/128x128/firefox.png"
+   ]
+  },
+  {
+   "name": 42,
+   "icons": [
+    "X/icons/1x1/x.png"
+   ]
+  },
+  {
+   "name": "Krita",
+   "icons": [
+    "Krita/icons/scalable/krita.svgz"
+   ]
+  },
+  {
+   "name": "Digikam",
+   "icons": [
+    "Digikam/icons/scalable/digikam.svgz",
+    "Digikam/icons/48x48/digikam.png"
+   ]
+  }
+ ]
+}

@@ -193,12 +193,14 @@ EXTAPP_API ExtAppStatus extapp_entry_remove(ExtAppContext *ctx,
 /* ------------------------------------------------------------------------ */
 
 typedef struct {
-    char *image_url;
-    char *thumbnail_url;
+    char *provider;    /* "AppImageHub", "Flathub", "Wikimedia Commons"   */
+    char *image_url;   /* full-size image to store as the icon             */
+    char *thumbnail_url; /* small preview (may equal image_url)            */
     char *title;
-    char *source;      /* page the image was found on */
-    int   width;
+    char *source;      /* web page describing the image / app             */
+    int   width;       /* 0 when unknown                                   */
     int   height;
+    bool  scalable;    /* vector image (SVG): any size                     */
 } ExtAppIconResult;
 
 typedef struct {
@@ -206,7 +208,15 @@ typedef struct {
     size_t            count;
 } ExtAppIconResultList;
 
-/* Search the web (currently DuckDuckGo Images) for icon candidates. */
+/* Search icon candidates for an application name. Queries AppImageHub,
+ * Flathub (real application icons) and Wikimedia Commons (logos) in
+ * parallel and merges the results, best matches first. Words like "icon"
+ * or "logo" in the query are ignored; a query made only of such words fails
+ * with EXTAPP_ERR_INVALID_ARG. `max_results` 0 means 40.
+ * Returns EXTAPP_OK (possibly with an empty list) when no source failed or
+ * when there are results; EXTAPP_ERR_NETWORK when there are no results and a
+ * source failed; EXTAPP_ERR_CANCELLED when cancelled.
+ * `cancel` may be polled from several threads at once. */
 EXTAPP_API ExtAppStatus extapp_icon_search(ExtAppContext *ctx,
                                            const char *query,
                                            size_t max_results,

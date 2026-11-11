@@ -85,8 +85,14 @@ static GtkWidget *make_result_child(EaIconSearchDialog *self, EaIconResult *r)
     gtk_box_append(GTK_BOX(box), stack);
 
     int w = ea_icon_result_get_width(r), h = ea_icon_result_get_height(r);
-    char *size = (w > 0 && h > 0) ? g_strdup_printf("%d × %d", w, h) : g_strdup("");
-    GtkWidget *label = gtk_label_new(size);
+    const char *provider = ea_icon_result_get_provider(r);
+    char *size = ea_icon_result_get_scalable(r) ? g_strdup("SVG")
+                 : (w > 0 && h > 0)            ? g_strdup_printf("%d × %d", w, h)
+                                               : g_strdup("");
+    char *caption = g_strdup_printf("%s\n%s", provider ? provider : "", size);
+    GtkWidget *label = gtk_label_new(caption);
+    gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_CENTER);
+    g_free(caption);
     g_free(size);
     gtk_widget_add_css_class(label, "caption");
     gtk_widget_add_css_class(label, "dim-label");
@@ -163,7 +169,8 @@ static void start_search(EaIconSearchDialog *self)
     self->cancel = g_cancellable_new();
     gtk_flow_box_remove_all(self->flow);
 
-    gtk_label_set_text(self->loading_label, "Searching DuckDuckGo Images…");
+    gtk_label_set_text(self->loading_label,
+                       "Searching AppImageHub, Flathub and Wikimedia Commons…");
     gtk_stack_set_visible_child_name(self->stack, "loading");
     gtk_widget_set_sensitive(GTK_WIDGET(self->search_btn), FALSE);
     /* No ref on self: closing/disposing cancels, and the callback bails out
@@ -326,7 +333,7 @@ static void ea_icon_search_dialog_init(EaIconSearchDialog *self)
     gtk_widget_set_margin_bottom(row, 6);
     self->entry = GTK_ENTRY(gtk_entry_new());
     gtk_widget_set_hexpand(GTK_WIDGET(self->entry), TRUE);
-    gtk_entry_set_placeholder_text(self->entry, "e.g. Kdenlive icon");
+    gtk_entry_set_placeholder_text(self->entry, "Application name, e.g. Kdenlive");
     g_signal_connect_swapped(self->entry, "activate", G_CALLBACK(start_search), self);
     self->search_btn = GTK_BUTTON(gtk_button_new_with_label("Search"));
     gtk_widget_add_css_class(GTK_WIDGET(self->search_btn), "suggested-action");
@@ -339,8 +346,9 @@ static void ea_icon_search_dialog_init(EaIconSearchDialog *self)
     self->stack = GTK_STACK(gtk_stack_new());
     gtk_stack_add_named(self->stack,
                         status_page("system-search-symbolic", "Search for an Icon",
-                                    "Images come from DuckDuckGo Images. Check "
-                                    "the license of an image before sharing it."),
+                                    "Icons come from AppImageHub, Flathub and "
+                                    "Wikimedia Commons. Logos may be trademarks: "
+                                    "check the license before sharing them."),
                         "idle");
 
     GtkWidget *lbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 12);

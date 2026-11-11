@@ -48,10 +48,12 @@ gboolean    ea_entry_get_target_exists(EaEntry *self);
 G_DECLARE_FINAL_TYPE(EaIconResult, ea_icon_result, EA, ICON_RESULT, GObject)
 
 EaIconResult *ea_icon_result_new(const ExtAppIconResult *r);
+const char   *ea_icon_result_get_provider(EaIconResult *self);
 const char   *ea_icon_result_get_image_url(EaIconResult *self);
 const char   *ea_icon_result_get_thumbnail_url(EaIconResult *self);
 const char   *ea_icon_result_get_title(EaIconResult *self);
 int           ea_icon_result_get_width(EaIconResult *self);
 int           ea_icon_result_get_height(EaIconResult *self);
+gboolean      ea_icon_result_get_scalable(EaIconResult *self);
 
 G_END_DECLS

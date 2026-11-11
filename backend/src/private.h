@@ -13,6 +13,7 @@ struct ExtAppContext {
     char *data_home;        /* ~/.local/share                 */
     char *applications_dir; /* ~/.local/share/applications    */
     char *icons_dir;        /* ~/.local/share/extapp/icons    */
+    char *cache_dir;        /* ~/.cache/extapp                */
     char *user_agent;
 };
 
@@ -96,6 +97,7 @@ char *ea_de_resolve_target(const EaDesktopEntry *de);
 
 typedef struct {
     const char *const *headers;  /* NULL-terminated "Name: value" list or NULL */
+    const char *post_body;       /* non-NULL: send a POST with this body       */
     bool        https_only;
     size_t      max_bytes;
     long        timeout_sec;
@@ -107,8 +109,11 @@ ExtAppStatus ea_http_get(ExtAppContext *ctx, const char *url,
                          long *http_code, char **err);
 char *ea_url_encode(const char *s);
 
-/* ---- icon_search_ddg.c ------------------------------------------------- */
+/* ---- icon_search.c --------------------------------------------------- */
 
+/* An icon source. `search` appends to `out` (which starts empty) and may be
+ * called concurrently with other providers; `cancel` may be polled from
+ * several threads at once. */
 typedef struct {
     const char *name;
     ExtAppStatus (*search)(ExtAppContext *ctx, const char *query,
@@ -117,12 +122,41 @@ typedef struct {
                            char **err);
 } EaIconProvider;
 
-extern const EaIconProvider ea_ddg_provider;
+extern const EaIconProvider ea_provider_appimagehub;
+extern const EaIconProvider ea_provider_flathub;
+extern const EaIconProvider ea_provider_commons;
 
-/* Exposed for unit tests. */
-char        *ea_ddg_extract_vqd(const char *html);
-ExtAppStatus ea_ddg_parse_results(const char *json, size_t max_results,
+/* Lower-cased search words with noise words ("icon", "logo", "app", ...)
+ * removed. NULL-terminated; may be empty. Free with ea_strv_free. */
+char **ea_icon_query_terms(const char *query);
+/* Join terms with spaces (empty string if none). */
+char  *ea_icon_terms_join(char **terms);
+/* How well an app name matches the terms: 0 = no match, higher = better. */
+int    ea_icon_name_score(const char *name, char **terms);
+/* Append a result (strings are copied; NULLs allowed except image/thumb
+ * both NULL, which is rejected). */
+bool   ea_icon_list_push(ExtAppIconResultList *l, const char *provider,
+                         const char *image_url, const char *thumbnail_url,
+                         const char *title, const char *source, int width,
+                         int height, bool scalable);
+/* extapp_icon_search with an explicit provider list (used by tests). */
+ExtAppStatus ea_icon_search_with(const EaIconProvider *const *providers,
+                                 size_t n_providers, ExtAppContext *ctx,
+                                 const char *query, size_t max_results,
+                                 ExtAppCancelFn cancel, void *user_data,
+                                 ExtAppIconResultList **out, char **err);
+void   ea_icon_list_clear(ExtAppIconResultList *l);
+
+/* Response parsers, exposed for unit tests. */
+ExtAppStatus ea_appimagehub_parse(const char *feed_json, char **terms,
+                                  size_t max_results,
                                   ExtAppIconResultList *out, char **err);
+ExtAppStatus ea_flathub_parse(const char *json, char **terms,
+                              size_t max_results, ExtAppIconResultList *out,
+                              char **err);
+ExtAppStatus ea_commons_parse(const char *json, char **terms,
+                              size_t max_results, ExtAppIconResultList *out,
+                              char **err);
 
 /* ---- icons.c ----------------------------------------------------------- */
 

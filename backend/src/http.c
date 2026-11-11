@@ -86,6 +86,8 @@ ExtAppStatus ea_http_get(ExtAppContext *ctx, const char *url,
     curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
     curl_easy_setopt(curl, CURLOPT_USERAGENT, ctx->user_agent);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, hdrs);
+    if (opts->post_body)
+        curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, opts->post_body);
     curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
     curl_easy_setopt(curl, CURLOPT_MAXREDIRS, 5L);
     curl_easy_setopt(curl, CURLOPT_ACCEPT_ENCODING, ""); /* gzip, br, ... */

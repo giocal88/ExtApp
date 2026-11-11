@@ -156,8 +156,9 @@ gboolean ea_entry_get_target_exists(EaEntry *self) { return self->target_exists;
 
 struct _EaIconResult {
     GObject parent_instance;
-    char *image_url, *thumbnail_url, *title;
+    char *provider, *image_url, *thumbnail_url, *title;
     int width, height;
+    gboolean scalable;
 };
 
 G_DEFINE_FINAL_TYPE(EaIconResult, ea_icon_result, G_TYPE_OBJECT)
@@ -165,6 +166,7 @@ G_DEFINE_FINAL_TYPE(EaIconResult, ea_icon_result, G_TYPE_OBJECT)
 static void ea_icon_result_finalize(GObject *obj)
 {
     EaIconResult *self = EA_ICON_RESULT(obj);
+    g_free(self->provider);
     g_free(self->image_url);
     g_free(self->thumbnail_url);
     g_free(self->title);
@@ -181,16 +183,20 @@ static void ea_icon_result_init(EaIconResult *self) { (void)self; }
 EaIconResult *ea_icon_result_new(const ExtAppIconResult *r)
 {
     EaIconResult *self = g_object_new(EA_TYPE_ICON_RESULT, NULL);
+    self->provider = g_strdup(r->provider);
     self->image_url = g_strdup(r->image_url);
     self->thumbnail_url = g_strdup(r->thumbnail_url);
     self->title = g_strdup(r->title);
     self->width = r->width;
     self->height = r->height;
+    self->scalable = r->scalable;
     return self;
 }
 
+const char *ea_icon_result_get_provider(EaIconResult *self) { return self->provider; }
 const char *ea_icon_result_get_image_url(EaIconResult *self) { return self->image_url; }
 const char *ea_icon_result_get_thumbnail_url(EaIconResult *self) { return self->thumbnail_url; }
 const char *ea_icon_result_get_title(EaIconResult *self) { return self->title; }
 int ea_icon_result_get_width(EaIconResult *self) { return self->width; }
 int ea_icon_result_get_height(EaIconResult *self) { return self->height; }
+gboolean ea_icon_result_get_scalable(EaIconResult *self) { return self->scalable; }

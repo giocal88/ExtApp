@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=ExtApp
+Comment=Create launcher shortcuts for AppImages and other programs
+Exec=extapp
+Icon=application-x-executable
+Terminal=false
+Categories=Utility;GTK;
+Keywords=AppImage;shortcut;launcher;desktop;
+StartupNotify=true

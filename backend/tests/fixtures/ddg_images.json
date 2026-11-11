@@ -1,0 +1,18 @@
+{
+  "ads": null,
+  "next": "i.js?q=firefox+icon&o=json&p=1&s=100&u=bing&f=,,,,,&l=us-en",
+  "query": "firefox icon",
+  "queryEncoded": "firefox%20icon",
+  "response_type": "places",
+  "results": [
+    {"height": 512, "image": "https://example.com/firefox.png", "image_token": "a", "source": "Bing",
+     "thumbnail": "https://tse1.mm.bing.net/th?id=OIP.1", "thumbnail_token": "b",
+     "title": "Firefox logo", "url": "https://example.com/page1", "width": 512},
+    {"height": 128, "image": "http://example.org/ff.ico", "source": "Bing",
+     "thumbnail": "//tse2.mm.bing.net/th?id=OIP.2", "title": "ff", "url": "https://example.org/", "width": 128},
+    {"source": "Bing", "title": "broken result without any url"},
+    {"height": "256", "image": "https://example.net/ff.svg", "source": "Bing",
+     "thumbnail": "https://tse3.mm.bing.net/th?id=OIP.3", "title": "svg", "url": "https://example.net/", "width": "256"}
+  ],
+  "vqd": {"firefox icon": "4-123456789012345678901234567890"}
+}
